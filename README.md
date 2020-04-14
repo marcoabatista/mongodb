@@ -214,8 +214,65 @@ WriteResult({ &quot;nMatched&quot; : 6003, &quot;nUpserted&quot; : 0, &quot;nMod
 WriteResult({ &quot;nRemoved&quot; : 70 })
 </pre>
 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro.
+<pre>&gt; db.italians.aggregate([{ &apos;$match&apos;: { $and: [{ mother: { $exists: 1 } }, { $or: [{ dog: { $exists: true } }, { cat: { $exists: true } }] }] } }, { &apos;$project&apos;: { &quot;firstname&quot;: 1, &quot;mother&quot;: 1, &quot;isEqual&quot;: { &quot;$cmp&quot;: [&quot;$firstname&quot;, &quot;$mother.firstname&quot;] } } }, { &apos;$match&apos;: { &quot;isEqual&quot;: 0 } }])
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffadea9cd5fe9f792628&quot;), &quot;firstname&quot; : &quot;Teresa&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Teresa&quot;, &quot;surname&quot; : &quot;Marchetti&quot;, &quot;age&quot; : 43 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffaeea9cd5fe9f79280d&quot;), &quot;firstname&quot; : &quot;Gabiele&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Gabiele&quot;, &quot;surname&quot; : &quot;Villa&quot;, &quot;age&quot; : 38 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffaeea9cd5fe9f792924&quot;), &quot;firstname&quot; : &quot;Andrea&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Andrea&quot;, &quot;surname&quot; : &quot;Martini&quot;, &quot;age&quot; : 35 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffafea9cd5fe9f792f69&quot;), &quot;firstname&quot; : &quot;Pietro&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Pietro&quot;, &quot;surname&quot; : &quot;Martino&quot;, &quot;age&quot; : 53 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffb0ea9cd5fe9f793549&quot;), &quot;firstname&quot; : &quot;Nicola&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Nicola&quot;, &quot;surname&quot; : &quot;Cattaneo&quot;, &quot;age&quot; : 106 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffb0ea9cd5fe9f79363f&quot;), &quot;firstname&quot; : &quot;Claudia&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Claudia&quot;, &quot;surname&quot; : &quot;Monti&quot;, &quot;age&quot; : 82 }, &quot;isEqual&quot; : 0 }
+{ &quot;_id&quot; : ObjectId(&quot;5e95ffb1ea9cd5fe9f793b4c&quot;), &quot;firstname&quot; : &quot;Sergio&quot;, &quot;mother&quot; : { &quot;firstname&quot; : &quot;Sergio&quot;, &quot;surname&quot; : &quot;Bernardi&quot;, &quot;age&quot; : 80 }, &quot;isEqual&quot; : 0 }</pre>
 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
+<pre>&gt; db.italians.aggregate([ {$group: {_id: &quot;$firstname&quot;}} ])
+{ &quot;_id&quot; : &quot;Emanuele&quot; }
+{ &quot;_id&quot; : &quot;Monica&quot; }
+{ &quot;_id&quot; : &quot;Alessandro&quot; }
+{ &quot;_id&quot; : &quot;Nicola&quot; }
+{ &quot;_id&quot; : &quot;Giovanni&quot; }
+{ &quot;_id&quot; : &quot;Lucia&quot; }
+{ &quot;_id&quot; : &quot;Federica&quot; }
+{ &quot;_id&quot; : &quot;Antonella&quot; }
+{ &quot;_id&quot; : &quot;Angela&quot; }
+{ &quot;_id&quot; : &quot;Enzo &quot; }
+{ &quot;_id&quot; : &quot;Giorgio&quot; }
+{ &quot;_id&quot; : &quot;Rita&quot; }
+{ &quot;_id&quot; : &quot;Veronica&quot; }
+{ &quot;_id&quot; : &quot;Silvia&quot; }
+{ &quot;_id&quot; : &quot;Claudio&quot; }
+{ &quot;_id&quot; : &quot;Patrizia&quot; }
+{ &quot;_id&quot; : &quot;Daniela&quot; }
+{ &quot;_id&quot; : &quot;Enrico&quot; }
+{ &quot;_id&quot; : &quot;Matteo&quot; }
+{ &quot;_id&quot; : &quot;Michela&quot; }
+Type &quot;it&quot; for more
+</pre>
 19. Agora faça a mesma lista do item acima, considerando nome completo.
+<pre>&gt; db.italians.aggregate([
+...     { $project: { nomeCompleto: { $concat: [ &quot;$firstname&quot;, &quot; &quot;, &quot;$surname&quot; ] } } },
+...     { $group: { _id: &quot;$nomeCompleto&quot;}}
+... ])
+{ &quot;_id&quot; : &quot;Enrico Caruso&quot; }
+{ &quot;_id&quot; : &quot;Claudio Sala&quot; }
+{ &quot;_id&quot; : &quot;Luigi Pellegrini&quot; }
+{ &quot;_id&quot; : &quot;Maria Cattaneo&quot; }
+{ &quot;_id&quot; : &quot;Marta Serra&quot; }
+{ &quot;_id&quot; : &quot;Luigi Longo&quot; }
+{ &quot;_id&quot; : &quot;Angelo Pellegrino&quot; }
+{ &quot;_id&quot; : &quot;Alessio Ferretti&quot; }
+{ &quot;_id&quot; : &quot;Giuseppe Fontana&quot; }
+{ &quot;_id&quot; : &quot;Mario Amato&quot; }
+{ &quot;_id&quot; : &quot;Mattia Bianchi&quot; }
+{ &quot;_id&quot; : &quot;Enrico Greco&quot; }
+{ &quot;_id&quot; : &quot;Lorenzo Amato&quot; }
+{ &quot;_id&quot; : &quot;Pietro Barone&quot; }
+{ &quot;_id&quot; : &quot;Monica Piras&quot; }
+{ &quot;_id&quot; : &quot;Stefania Grassi&quot; }
+{ &quot;_id&quot; : &quot;Laura Amato&quot; }
+{ &quot;_id&quot; : &quot;Chiara Marino&quot; }
+{ &quot;_id&quot; : &quot;Dario Mariani&quot; }
+{ &quot;_id&quot; : &quot;Sergio Leone&quot; }
+Type &quot;it&quot; for more
+</pre>
 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos.
 <pre>db.italians.find({$and: [{$or: [{&quot;favFruits&quot; : &quot;Banana&quot;}, {&quot;favFruits&quot; : &quot;Maçã&quot;}]}, {$or: [{dog: {$exists: true}}, {cat:{ $exists: true}} ]}, {&quot;age&quot; : {&quot;$gt&quot; : 20, &quot;$lt&quot; : 60}}]}).count()
 1298
