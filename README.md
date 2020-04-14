@@ -202,16 +202,23 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 WriteResult({ &quot;nRemoved&quot; : 1 })
 </pre>
 15. Passou um ano. Atualize a idade de todos os italianos e dos bichanos em 1.
-<pre>&gt; db.italians.update({}, {$inc :{&quot;age&quot; : 1}})
-WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
-&gt; db.italians.update({cat: { $exists: true}}, {$inc :{&quot;cat.age&quot; : 1}})
-WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
-&gt; db.italians.update({dog: { $exists: true}}, {$inc :{&quot;dog.age&quot; : 1}})
-WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
+<pre>&gt; db.italians.update({}, {&quot;$inc&quot;: {&quot;age&quot;: 1}}, {multi: true});
+WriteResult({ &quot;nMatched&quot; : 10000, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 10000 })
+&gt; db.italians.update({dog: { $exists: true}}, {$inc :{&quot;dog.age&quot; : 1}}, {multi: true})
+WriteResult({ &quot;nMatched&quot; : 3993, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 3993 })
+&gt; db.italians.update({cat: { $exists: true}}, {$inc :{&quot;dog.age&quot; : 1}}, {multi: true})
+WriteResult({ &quot;nMatched&quot; : 6003, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 6003 })
 </pre>
 16. O Corona Vírus chegou na Itália e misteriosamente atingiu pessoas somente com gatos e de 66 anos. Remova esses italianos.
+<pre>&gt; db.italians.remove({cat: { $exists: true}, &quot;age&quot; : 66});
+WriteResult({ &quot;nRemoved&quot; : 70 })
+</pre>
 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro.
 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
 19. Agora faça a mesma lista do item acima, considerando nome completo.
 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos.
+<pre>db.italians.find({$and: [{$or: [{&quot;favFruits&quot; : &quot;Banana&quot;}, {&quot;favFruits&quot; : &quot;Maçã&quot;}]}, {$or: [{dog: {$exists: true}}, {cat:{ $exists: true}} ]}, {&quot;age&quot; : {&quot;$gt&quot; : 20, &quot;$lt&quot; : 60}}]}).count()
+1298
+</pre>
+
 
