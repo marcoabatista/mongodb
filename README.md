@@ -109,13 +109,106 @@ WriteResult({ &quot;nInserted&quot; : 1 })
 ...     return ret;
 ... }}).count()
 114
+&gt; db.italians.find({ $or: [{ $and: [ { dog: { $exists: true}}, { $where: &quot;this.firstname== this.dog.name&quot; } ] },{ $and: [ { cat: { $exists: true}}, { $where: &quot;this.firstname== this.cat.name&quot; } ] }]}).count()
+114
 </pre>
 10. Projete apenas o nome e sobrenome das pessoas com tipo de sangue de fator RH negativo
+<pre>&gt; db.italians.find({&quot;bloodType&quot; : /-/}, {&quot;firstname&quot;: 1, &quot;surname&quot;: 1, &quot;bloodType&quot; : 1, &quot;_id&quot;:0})
+{ &quot;firstname&quot; : &quot;Manuela&quot;, &quot;surname&quot; : &quot;Battaglia&quot;, &quot;bloodType&quot; : &quot;B-&quot; }
+{ &quot;firstname&quot; : &quot;Chiara&quot;, &quot;surname&quot; : &quot;Mazza&quot;, &quot;bloodType&quot; : &quot;A-&quot; }
+{ &quot;firstname&quot; : &quot;Salvatore&quot;, &quot;surname&quot; : &quot;Gentile&quot;, &quot;bloodType&quot; : &quot;A-&quot; }
+{ &quot;firstname&quot; : &quot;Angela&quot;, &quot;surname&quot; : &quot;Battaglia&quot;, &quot;bloodType&quot; : &quot;B-&quot; }
+{ &quot;firstname&quot; : &quot;Enrico&quot;, &quot;surname&quot; : &quot;Pellegrino&quot;, &quot;bloodType&quot; : &quot;O-&quot; }
+{ &quot;firstname&quot; : &quot;Ilaria&quot;, &quot;surname&quot; : &quot;Coppola&quot;, &quot;bloodType&quot; : &quot;B-&quot; }
+{ &quot;firstname&quot; : &quot;Laura&quot;, &quot;surname&quot; : &quot;Messina&quot;, &quot;bloodType&quot; : &quot;B-&quot; }
+{ &quot;firstname&quot; : &quot;Matteo&quot;, &quot;surname&quot; : &quot;Costa&quot;, &quot;bloodType&quot; : &quot;AB-&quot; }
+{ &quot;firstname&quot; : &quot;Massimo&quot;, &quot;surname&quot; : &quot;Marini&quot;, &quot;bloodType&quot; : &quot;O-&quot; }
+{ &quot;firstname&quot; : &quot;Maurizio&quot;, &quot;surname&quot; : &quot;Pellegrini&quot;, &quot;bloodType&quot; : &quot;B-&quot; }
+{ &quot;firstname&quot; : &quot;Emanuela&quot;, &quot;surname&quot; : &quot;Leone&quot;, &quot;bloodType&quot; : &quot;O-&quot; }
+Type &quot;it&quot; for more
+</pre>
 11. Projete apenas os animais dos italianos. Devem ser listados os animais com nome e idade. Não mostre o identificado do mongo (ObjectId)
+<pre>&gt; db.italians.find({$or: [{dog:{$exists:true}},{cat:{$exists:true}}]  },{&quot;dog.name&quot;:1, &quot;dog.age&quot;: 1, &quot;cat.name&quot;:1, &quot;cat.age&quot; : 1, &quot;_id&quot; : 0})
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Mirko&quot;, &quot;age&quot; : 7 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Michele&quot;, &quot;age&quot; : 6 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Giovanni&quot;, &quot;age&quot; : 13 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Gianluca&quot;, &quot;age&quot; : 0 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Mario&quot;, &quot;age&quot; : 11 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Teresa&quot;, &quot;age&quot; : 11 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Dario&quot;, &quot;age&quot; : 9 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Giorgia&quot;, &quot;age&quot; : 16 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Cristian&quot;, &quot;age&quot; : 2 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Stefano&quot;, &quot;age&quot; : 3 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Silvia&quot;, &quot;age&quot; : 17 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Emanuele&quot;, &quot;age&quot; : 0 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Elisa&quot;, &quot;age&quot; : 4 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Giulia&quot;, &quot;age&quot; : 5 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Rita&quot;, &quot;age&quot; : 14 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Veronica&quot;, &quot;age&quot; : 10 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Mauro&quot;, &quot;age&quot; : 5 } }
+{ &quot;dog&quot; : { &quot;name&quot; : &quot;Silvia&quot;, &quot;age&quot; : 12 } }
+{ &quot;dog&quot; : { &quot;name&quot; : &quot;Patrizia&quot;, &quot;age&quot; : 2 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Eleonora&quot;, &quot;age&quot; : 17 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Angela&quot;, &quot;age&quot; : 6 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Angela&quot;, &quot;age&quot; : 3 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Gianluca&quot;, &quot;age&quot; : 12 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Giovanna&quot;, &quot;age&quot; : 12 } }
+{ &quot;dog&quot; : { &quot;name&quot; : &quot;Mario&quot;, &quot;age&quot; : 17 } }
+{ &quot;dog&quot; : { &quot;name&quot; : &quot;Elena&quot;, &quot;age&quot; : 10 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Giovanna&quot;, &quot;age&quot; : 16 }, &quot;dog&quot; : { &quot;name&quot; : &quot;Roberto&quot;, &quot;age&quot; : 14 } }
+{ &quot;cat&quot; : { &quot;name&quot; : &quot;Giuseppe&quot;, &quot;age&quot; : 13 } }
+Type &quot;it&quot; for more</pre>
 12. Quais são as 5 pessoas mais velhas com sobrenome Rossi?
+<pre>&gt; db.italians.find({&quot;surname&quot;: &quot;Rossi&quot;},{&quot;name&quot;:1,&quot;surname&quot;:1,&quot;age&quot;:1}).pretty().limit(5).sort({age : -1})
+{
+	&quot;_id&quot; : ObjectId(&quot;5e95ffb2ea9cd5fe9f79437a&quot;),
+	&quot;surname&quot; : &quot;Rossi&quot;,
+	&quot;age&quot; : 79
+}
+{
+	&quot;_id&quot; : ObjectId(&quot;5e95ffadea9cd5fe9f7922ee&quot;),
+	&quot;surname&quot; : &quot;Rossi&quot;,
+	&quot;age&quot; : 77
+}
+{
+	&quot;_id&quot; : ObjectId(&quot;5e95ffb0ea9cd5fe9f79357f&quot;),
+	&quot;surname&quot; : &quot;Rossi&quot;,
+	&quot;age&quot; : 77
+}
+{
+	&quot;_id&quot; : ObjectId(&quot;5e95ffb0ea9cd5fe9f7937f1&quot;),
+	&quot;surname&quot; : &quot;Rossi&quot;,
+	&quot;age&quot; : 77
+}
+{
+	&quot;_id&quot; : ObjectId(&quot;5e95ffb2ea9cd5fe9f794122&quot;),
+	&quot;surname&quot; : &quot;Rossi&quot;,
+	&quot;age&quot; : 77
+}
+</pre>
 13. Crie um italiano que tenha um leão como animal de estimação. Associe um nome e idade ao bichano
+<pre>&gt; db.italians.insert({
+... &quot;firstname&quot; : &quot;Marco&quot;,
+... &quot;surname&quot; : &quot;Batista&quot;,
+... &quot;username&quot; : &quot;marcoab&quot;,
+... &quot;age&quot; : 35,
+... &quot;email&quot; : &quot;marcoabatista@gmail.com&quot;,
+... &quot;bloodType&quot; : &quot;O-&quot;,
+... &quot;id_num&quot; : &quot;123456789001&quot;,
+... &quot;registerDate&quot; : new Date(&quot;2020/04/14&quot;),
+... &quot;ticketNumber&quot; : 13456789,
+... &quot;jobs&quot; : [ &quot;Consultor&quot; ],
+... &quot;favFruits&quot; : [ &quot;Laranja&quot; ],
+... &quot;movies&quot; : [ { &quot;title&quot; : &quot;Seven: Os Sete Crimes Capitais (1995)&quot;, &quot;rating&quot; : 3.86 } ],
+... &quot;lion&quot; : { &quot;name&quot; : &quot;Pacato&quot;, &quot;age&quot; : 5 } })
+WriteResult({ &quot;nInserted&quot; : 1 })
+</pre>
 14. Infelizmente o Leão comeu o italiano. Remova essa pessoa usando o Id.
+<pre>&gt; db.italians.find({&quot;firstname&quot;:&quot;Marco&quot;, &quot;surname&quot;:&quot;Batista&quot;},{&quot;_id&quot;:1})
+{ &quot;_id&quot; : ObjectId(&quot;5e961847f3c1c2f4ea96ebb1&quot;) }
+&gt; db.italians.remove({&quot;_id&quot; : ObjectId(&quot;5e961847f3c1c2f4ea96ebb1&quot;)})
+WriteResult({ &quot;nRemoved&quot; : 1 })
+</pre>
 15. Passou um ano. Atualize a idade de todos os italianos e dos bichanos em 1.
+<pre>&gt; db.italians.update({}, {$inc :{&quot;age&quot; : 1}})
+WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
+&gt; db.italians.update({cat: { $exists: true}}, {$inc :{&quot;cat.age&quot; : 1}})
+WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
+&gt; db.italians.update({dog: { $exists: true}}, {$inc :{&quot;dog.age&quot; : 1}})
+WriteResult({ &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 })
+</pre>
 16. O Corona Vírus chegou na Itália e misteriosamente atingiu pessoas somente com gatos e de 66 anos. Remova esses italianos.
 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro.
 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
