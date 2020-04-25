@@ -380,6 +380,29 @@ Type &quot;it&quot; for more
 ### Exercício 3 – Fraude na Enron!
 
 1. Liste as pessoas que enviaram e-mails (de forma distinta, ou seja, sem repetir). Quantas pessoas são?
+<pre>&gt; db.enron.aggregate([{&apos;$group&apos;: {_id: &apos;$sender&apos;, total: {&apos;$sum&apos;:1}}}])
+{ &quot;_id&quot; : &quot;ssmith@uwtgc.org&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;confadmin@ziffenergy.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;tally@ssprd2.net&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;tour@rice.edu&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;wefinvitation@forbes.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;cheryltd@tbardranch.com&quot;, &quot;total&quot; : 2 }
+{ &quot;_id&quot; : &quot;im1timescape@netscape.net&quot;, &quot;total&quot; : 3 }
+{ &quot;_id&quot; : &quot;mailings@cnn.com&quot;, &quot;total&quot; : 11 }
+{ &quot;_id&quot; : &quot;looksee@rocketmail.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;iertx@hern.org&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;holly@layfam.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;elizabeth.linnell@enron.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;greetings@reply.yahoo.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;sjhoil@earthlink.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;mark.metts@enron.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;ldumdum@ase.org&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;danesmommy0702@msn.com&quot;, &quot;total&quot; : 3 }
+{ &quot;_id&quot; : &quot;imajerkoff@hotmail.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;rushingmk@surfmk.com&quot;, &quot;total&quot; : 1 }
+{ &quot;_id&quot; : &quot;rsant@aesc.com&quot;, &quot;total&quot; : 1 }
+Type &quot;it&quot; for more
+</pre>
 <pre>&gt; db.enron.distinct(&quot;sender&quot;).length
 2200
 </pre>
